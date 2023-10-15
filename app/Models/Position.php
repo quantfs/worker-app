@@ -15,4 +15,14 @@ class Position extends Model
     public function workers () {
         return $this->hasMany(Worker::class, 'position_id', 'id');
     }
+
+    public function department () {
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function queryWorker () {
+        //return $this->hasOne(Worker::class, 'position_id', 'id')->ofMany('age', 'min');
+        return $this->hasOne(Worker::class, 'position_id', 'id')->where('surname', 'Krasavina');
+    }
+
 }

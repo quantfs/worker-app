@@ -2,10 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Avatar;
+use App\Models\Client;
+use App\Models\Department;
 use App\Models\Position;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\ProjectWorker;
+use App\Models\Review;
+use App\Models\Tag;
 use App\Models\Worker;
 use Illuminate\Console\Command;
 
@@ -30,8 +35,8 @@ class DevCommand extends Command
      */
     public function handle()
     {
-        //$this->prepareData();
-        //$this->prepareManyToMany();
+//        $this->prepareData();
+//        $this->prepareManyToMany();
 
         /* Получили рабочего из профиля из БД*/
         //$profile = Profile::find(1);
@@ -92,25 +97,129 @@ class DevCommand extends Command
 //        $project = Project::find(1);
 //        $worker->projects()->toggle($project->id);
         /* и наоборот добавляем в проект рабочих */
-        $project = Project::find(1);
-        $worker1 = Worker::find(2);
-        $worker2 = Worker::find(1);
-        $worker3 = Worker::find(3);
+//        $project = Project::find(1);
+//        $worker1 = Worker::find(2);
+//        $worker2 = Worker::find(1);
+//        $worker3 = Worker::find(3);
+//        $project->workers()->sync($worker1->id);
 
-        $project->workers()->sync($worker1->id);
+        /* Найдем боса рабочего депертамента IT */
+//        $department = Department::find(1); // деп. IT
+//        $position = Position::where('department_id', $department->id)->where('title', 'Boss')->first(); // нашли должность для этого департемената
+//        $worker = Worker::where('position_id', $position->id)->first();
+//        dd($worker->toArray());
+        /* и через модель */
+//        $department = Department::find(1); // деп. IT
+//        $worker = $department->boss;
+//        dd($worker->toArray());
+
+        /* и наоборот найдем департамент у рабочего */
+//        $worker = Worker::find(7);
+//        dd($worker->position->department->toArray());
+
+        /* Найдем всех рабочих департамента */
+//        $department = Department::find(1);
+//        dd($department->workers->toArray());
+
+
+        /* Создаем путь к аватарам */
+//        $worker = Worker::find(5);
+//        $worker->avatar()->create([
+//            'path' => 'some path',
+//        ]);
+//
+//        $client = Client::find(2);
+//        $client->avatar()->create([
+//            'path' => 'client path',
+//        ]);
+
+        /* Берем созданные аватары */
+//        $worker = Worker::find(5);
+//        dd($worker->avatar->path);
+
+        /* Смотрим кому принадлежит какой-нибудь аватар */
+//        $avatar = Avatar::find(1);
+//        dd($avatar->avatarable->name);
+
+
+        /* Создаем отзывы для рабочих и клиентов */
+//        $worker = Worker::find(5);
+//        $worker->reviews()->create([
+//            'body' => 'body 1'
+//        ]);
+//        $worker->reviews()->create([
+//            'body' => 'body 2'
+//        ]);
+//        $worker->reviews()->create([
+//            'body' => 'body 3'
+//        ]);
+//
+//        $client = Client::find(2);
+//        $client->reviews()->create([
+//            'body' => 'body 1'
+//        ]);
+//        $client->reviews()->create([
+//            'body' => 'body 2'
+//        ]);
+//        $client->reviews()->create([
+//            'body' => 'body 3'
+//        ]);
+//
+//        dump($worker->reviews->toArray());
+//
+//        $review = Review::where('body', 'body 1')->first();
+//        dd($review->reviewable->toArray());
+
+        /* Добавим теги для клиента и рабочего */
+//        $worker = Worker::find(5);
+//        $client = Client::find(2);
+//
+//        $worker->tags()->attach([1, 3]);
+//        $client->tags()->attach([2, 3]);
+
+        /* Найдем у кого есть 3-ий тег */
+//        $tag = Tag::find(3);
+//        dd($tag->workers->toArray(), $tag->clients->toArray());
+
+        /* Найдем рабочего по запросу в данном случае самый страший из извесностной должности */
+        $position = Position::first();
+        dd($position->queryWorker->toArray());
 
         return 0;
     }
 
-    private function prepareData() {
+    private function prepareData()
+    {
+        Client::create([
+            'name' => 'Bob'
+        ]);
+        Client::create([
+            'name' => 'Viktor'
+        ]);
+        Client::create([
+            'name' => 'Maria'
+        ]);
+
+
+        $department1 = Department::create([
+            'title' => 'IT'
+        ]);
+        $department2 = Department::create([
+            'title' => 'Analytics'
+        ]);
+
+
         $position1 = Position::create([
-            'title' => 'Developer'
+            'title' => 'Developer',
+            'department_id' => $department1->id,
         ]);
         $position2 = Position::create([
-            'title' => 'Manager'
+            'title' => 'Manager',
+            'department_id' => $department1->id,
         ]);
         $position3 = Position::create([
             'title' => 'Designer',
+            'department_id' => $department1->id,
         ]);
 
         $workerData1 = [
@@ -227,7 +336,8 @@ class DevCommand extends Command
         Profile::create($profileData6);
     }
 
-    private function prepareManyToMany() {
+    private function prepareManyToMany()
+    {
         $workerManager = Worker::find(2);
         $workerBackend = Worker::find(1);
         $workerDesigner1 = Worker::find(5);
