@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SomeJob;
 use App\Models\Avatar;
 use App\Models\Client;
 use App\Models\Department;
@@ -182,8 +183,18 @@ class DevCommand extends Command
 //        dd($tag->workers->toArray(), $tag->clients->toArray());
 
         /* Найдем рабочего по запросу в данном случае самый страший из извесностной должности */
-        $position = Position::first();
-        dd($position->queryWorker->toArray());
+//        $position = Position::first();
+//        dd($position->queryWorker->toArray());
+
+        /* Обновим данные рабочего для вызова события обновления */
+//        $worker = Worker::find(1);
+//        $worker->update([
+//            'name' => 'Ivan',
+//            'age' => '25.000'
+//        ]);
+
+        /* Вызыв Job */
+        SomeJob::dispatchSync()->onQueue('some_queue');
 
         return 0;
     }
