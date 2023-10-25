@@ -15,14 +15,14 @@ class Worker extends Model
 
     protected static function booted()
     {
-        static::created(function ($model){
-            event(new CreatedEvent($model));
-        });
-        static::updated(function ($model){
-            if($model->waschanged()) {
-                dd($model->getOriginal('age'), $model->getAttributes()['age']);
-            }
-        });
+//        static::created(function ($model){
+//            event(new CreatedEvent($model));
+//        });
+//        static::updated(function ($model){
+//            if($model->waschanged()) {
+//                dd($model->getOriginal('age'), $model->getAttributes()['age']);
+//            }
+//        });
     }
 
     public function profile() {

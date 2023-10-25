@@ -3,11 +3,13 @@
 @section('content')
 <div>
     <hr>
+        @can('create', \App\Models\Worker::class)
         <div>
-            <a href="{{ route('worker.create') }}">Добавить</a>
+            <a href="{{ route('workers.create') }}">Добавить</a>
         </div>
+        @endcan
         <div>
-            <form action="{{ route('worker.index') }}">
+            <form action="{{ route('workers.index') }}">
                 <input type="text" name="name" placeholder="name" value="{{ request()->get('name') }}">
                 <input type="text" name="surname" placeholder="surname" value="{{ request()->get('surname') }}">
                 <input type="text" name="email" placeholder="email" value="{{ request()->get('email') }}">
@@ -20,7 +22,7 @@
                 <label for="isMarried">is_married</label>
 
                 <input type="submit" value="Отправить">
-                <a href="{{ route('worker.index') }}">Сбросить</a>
+                <a href="{{ route('workers.index') }}">Сбросить</a>
 
             </form>
         </div>
@@ -35,16 +37,20 @@
         <div>is_married: {{ $worker->is_married }}</div>
         <div>
             <div>
-                <a href="{{ route('worker.show', $worker) }}">Посмотреть</a>
+                <a href="{{ route('workers.show', $worker) }}">Посмотреть</a>
             </div>
+            @can('update', $worker)
             <div>
-                <a href="{{ route('worker.edit', $worker) }}">Редактировать</a>
+                <a href="{{ route('workers.edit', $worker) }}">Редактировать</a>
             </div>
-            <form action="{{ route('worker.delete', $worker) }}" method="post">
+            @endcan
+            @can('delete', $worker)
+            <form action="{{ route('workers.destroy', $worker) }}" method="post">
                 @csrf
                 @method('delete')
                 <input type="submit" value="Удалить">
             </form>
+            @endcan
         </div>
         <hr>
     @endforeach

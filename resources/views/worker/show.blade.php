@@ -15,7 +15,7 @@
             <input type="submit" value="Удалить">
         </form>
         <div>
-            <a href="{{ route('worker.index') }}">Назад</a>
+            <a href="{{ route('workers.index') }}">Назад</a>
         </div>
         <hr>
 </div>

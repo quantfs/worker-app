@@ -3,7 +3,7 @@
 @section('content')
 <div>
     <hr>
-    <form action="{{ route('worker.store') }}" method="post">
+    <form action="{{ route('workers.store') }}" method="post">
         @csrf
         <div style="margin-bottom: 15px">
             <input type="text" name="name" placeholder="name"

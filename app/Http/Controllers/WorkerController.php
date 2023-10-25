@@ -51,18 +51,24 @@ class WorkerController extends Controller
     }
 
     public function store(StoreRequest $request) {
+        $this->authorize('create', Worker::class);
+
         $data = $request->validated();
         $data['is_married'] = isset($data['is_married']);
         Worker::create($data);
 
-        return redirect()->route('worker.index');
+        return redirect()->route('workers.index');
     }
 
     public function edit(Worker $worker) {
+        $this->authorize('update', $worker);
+
         return view('worker.edit', compact('worker'));
     }
 
     public function update(Worker $worker, UpdateRequest $request) {
+        $this->authorize('update', $worker);
+
         $data = $request->validated();
         $data['is_married'] = isset($data['is_married']);
         $worker->update($data);
@@ -70,7 +76,9 @@ class WorkerController extends Controller
         return view('worker.show', compact('worker'));
     }
 
-    public function delete(Worker $worker) {
+    public function destroy(Worker $worker) {
+        $this->authorize('delete', $worker);
+
         $worker->delete();
         $workers = Worker::all();
 
