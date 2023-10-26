@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\Var1\WorkerFilter;
 use App\Http\Requests\Worker\IndexRequest;
 use App\Http\Requests\Worker\StoreRequest;
 use App\Http\Requests\Worker\UpdateRequest;
@@ -15,6 +16,10 @@ class WorkerController extends Controller
 
         $workerQuery = Worker::query();
 
+        $filter = new WorkerFilter($data);
+        $filter->apllyFilter($workerQuery);
+
+        /*
         if (isset($data['name'])) {
             $workerQuery->where('name', 'like', "%{$data['name']}%");
         }
@@ -36,6 +41,7 @@ class WorkerController extends Controller
         if (isset($data['is_married'])) {
             $workerQuery->where('is_married', true);
         }
+        */
 
         $workers =$workerQuery->paginate(4);
 

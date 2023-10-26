@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Filters\Var1\WorkerFilter;
 use App\Jobs\SomeJob;
 use App\Models\Avatar;
 use App\Models\Client;
@@ -194,7 +195,16 @@ class DevCommand extends Command
 //        ]);
 
         /* Вызыв Job */
-        SomeJob::dispatchSync()->onQueue('some_queue');
+//        SomeJob::dispatchSync()->onQueue('some_queue');
+
+        /* Проверка работы фильтра */
+        $workerQuery = Worker::query();
+
+        $filter = new WorkerFilter(['is_married' => true]);
+
+        $filter->apllyFilter($workerQuery);
+
+        dd($workerQuery->get());
 
         return 0;
     }
