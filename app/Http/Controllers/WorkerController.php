@@ -3,21 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filters\Var1\WorkerFilter;
+use App\Http\Filters\Var2\Worker\AgeFrom;
+use App\Http\Filters\Var2\Worker\AgeTo;
+use App\Http\Filters\Var2\Worker\Name;
 use App\Http\Requests\Worker\IndexRequest;
 use App\Http\Requests\Worker\StoreRequest;
 use App\Http\Requests\Worker\UpdateRequest;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
+
 
 class WorkerController extends Controller
 {
     public function index(IndexRequest $request) {
         $data = $request->validated();
 
-        $workerQuery = Worker::query();
+        //$filter = new WorkerFilter($data);
 
-        $filter = new WorkerFilter($data);
-        $filter->apllyFilter($workerQuery);
+
+        /*$filter = app()->make(WorkerFilter::class, ['params' => $data]);
+        $workerQuery = Worker::filter($filter);*/
+
+
+        $workerQuery = app()->make(Pipeline::class)
+            ->send(Worker::query())
+            ->through([
+                AgeFrom::class,
+                AgeTo::class,
+                Name::class
+            ])
+            ->thenReturn();
 
         /*
         if (isset($data['name'])) {
